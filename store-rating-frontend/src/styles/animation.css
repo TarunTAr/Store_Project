@@ -1,0 +1,737 @@
+/* ==========================================================================
+   ANIMATIONS & KEYFRAMES - Store Rating Platform
+   Clever animations and micro-interactions for enhanced UX
+   ========================================================================== */
+
+/* Global Animation Settings */
+:root {
+  --animation-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   LOADING ANIMATIONS
+   ========================================================================== */
+
+/* Spinning Loader */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Pulsing Animation */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Breathing Effect */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+.animate-breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* Loading Dots */
+@keyframes loading-dots {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1.2); opacity: 1; }
+}
+
+.loading-dots {
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.loading-dots span {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--color-primary-600);
+  border-radius: 50%;
+  animation: loading-dots 1.4s ease-in-out infinite both;
+}
+
+.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots span:nth-child(3) { animation-delay: 0s; }
+
+/* Progress Bar Animation */
+@keyframes progress-indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-indeterminate {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-gray-200);
+}
+
+.progress-indeterminate::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(90deg, transparent, var(--color-primary-600), transparent);
+  animation: progress-indeterminate 2s infinite;
+}
+
+/* ==========================================================================
+   STAR RATING ANIMATIONS (Core Feature)
+   ========================================================================== */
+
+/* Star Fill Animation */
+@keyframes star-fill {
+  0% { transform: scale(0.8) rotate(-10deg); opacity: 0.5; }
+  50% { transform: scale(1.2) rotate(0deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Star Bounce on Rating */
+@keyframes star-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3) rotate(15deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* Star Shimmer Effect */
+@keyframes star-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.star-rating {
+  display: inline-flex;
+  gap: 0.125rem;
+}
+
+.star {
+  font-size: 1.5rem;
+  color: var(--color-gray-300);
+  cursor: pointer;
+  transition: all 0.2s var(--animation-timing);
+  position: relative;
+  user-select: none;
+}
+
+.star.filled {
+  color: var(--color-warning-500);
+  animation: star-fill 0.3s var(--animation-bounce) forwards;
+}
+
+.star.interactive:hover {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+}
+
+.star.interactive:active {
+  animation: star-bounce 0.4s var(--animation-bounce);
+}
+
+/* Star Shimmer on Hover */
+.star.interactive:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: star-shimmer 0.6s ease-out;
+}
+
+/* Rating Success Animation */
+@keyframes rating-success {
+  0% { transform: scale(1); }
+  50% { 
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(var(--color-success-500), 0.3);
+  }
+  100% { transform: scale(1); }
+}
+
+.rating-submitted {
+  animation: rating-success 0.6s var(--animation-bounce);
+}
+
+/* ==========================================================================
+   CARD & LIST ANIMATIONS
+   ========================================================================== */
+
+/* Card Hover Effects */
+.card-hover {
+  transition: all 0.3s var(--animation-timing);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Card Slide In */
+@keyframes slide-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.4s var(--animation-timing);
+}
+
+/* Staggered List Animation */
+.stagger-children > * {
+  animation: slide-in-up 0.4s var(--animation-timing) backwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+.stagger-children > *:nth-child(9) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(10) { animation-delay: 450ms; }
+
+/* Store Card Flip Effect */
+@keyframes card-flip {
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(90deg); }
+  100% { transform: rotateY(0deg); }
+}
+
+.card-flip {
+  animation: card-flip 0.6s var(--animation-timing);
+}
+
+/* ==========================================================================
+   BUTTON ANIMATIONS
+   ========================================================================== */
+
+/* Button Ripple Effect */
+@keyframes button-ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: scale(0) translate(-50%, -50%);
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+
+.btn-ripple:active::after {
+  animation: button-ripple 0.6s ease-out;
+}
+
+/* Button Loading State */
+@keyframes button-loading {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.btn-loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin: -0.5rem 0 0 -0.5rem;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: button-loading 1s linear infinite;
+}
+
+.btn-loading .btn-text {
+  opacity: 0;
+}
+
+/* Button Bounce on Click */
+@keyframes button-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+.btn-bounce:active {
+  animation: button-bounce 0.2s var(--animation-timing);
+}
+
+/* ==========================================================================
+   FORM ANIMATIONS
+   ========================================================================== */
+
+/* Input Focus Animation */
+.input-group {
+  position: relative;
+}
+
+.input-animated {
+  border: 2px solid var(--color-border-primary);
+  transition: all 0.3s var(--animation-timing);
+}
+
+.input-animated:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-500), 0.1);
+  transform: translateY(-1px);
+}
+
+/* Floating Label Animation */
+.input-floating {
+  position: relative;
+}
+
+.input-floating label {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: all 0.3s var(--animation-timing);
+  color: var(--color-text-muted);
+}
+
+.input-floating input:focus + label,
+.input-floating input:not(:placeholder-shown) + label {
+  top: 0;
+  left: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--color-primary-600);
+  background: var(--color-background-primary);
+  padding: 0 0.25rem;
+  transform: translateY(-50%);
+}
+
+/* Form Validation Animations */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+  20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+.input-error {
+  animation: shake 0.5s ease-in-out;
+  border-color: var(--color-error-500) !important;
+}
+
+@keyframes success-check {
+  0% {
+    transform: scale(0) rotate(45deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(45deg);
+    opacity: 1;
+  }
+}
+
+.input-success::after {
+  content: '';
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  width: 6px;
+  height: 12px;
+  border: 2px solid var(--color-success-500);
+  border-top: 0;
+  border-left: 0;
+  transform-origin: center;
+  animation: success-check 0.3s var(--animation-bounce) forwards;
+}
+
+/* ==========================================================================
+   PAGE TRANSITION ANIMATIONS
+   ========================================================================== */
+
+/* Fade In Animation */
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s var(--animation-timing);
+}
+
+/* Slide In From Right */
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s var(--animation-timing);
+}
+
+/* Slide In From Left */
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.4s var(--animation-timing);
+}
+
+/* Scale In Animation */
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s var(--animation-timing);
+}
+
+/* ==========================================================================
+   MODAL & OVERLAY ANIMATIONS
+   ========================================================================== */
+
+/* Modal Backdrop Fade */
+@keyframes modal-backdrop-fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.modal-backdrop {
+  animation: modal-backdrop-fade 0.2s var(--animation-timing);
+}
+
+/* Modal Scale In */
+@keyframes modal-scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-content {
+  animation: modal-scale-in 0.3s var(--animation-bounce);
+}
+
+/* Modal Slide Down */
+@keyframes modal-slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-slide-down {
+  animation: modal-slide-down 0.4s var(--animation-timing);
+}
+
+/* ==========================================================================
+   NOTIFICATION ANIMATIONS
+   ========================================================================== */
+
+/* Toast Slide In */
+@keyframes toast-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.toast-slide-in {
+  animation: toast-slide-in 0.3s var(--animation-timing);
+}
+
+/* Notification Bounce In */
+@keyframes notification-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(-100px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-10px);
+  }
+  70% {
+    transform: scale(0.9) translateY(0);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+.notification-bounce-in {
+  animation: notification-bounce-in 0.5s var(--animation-bounce);
+}
+
+/* ==========================================================================
+   DATA VISUALIZATION ANIMATIONS
+   ========================================================================== */
+
+/* Chart Bar Animation */
+@keyframes chart-bar-grow {
+  0% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+.chart-bar {
+  animation: chart-bar-grow 0.6s var(--animation-timing);
+}
+
+/* Counter Animation */
+@keyframes counter-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.counter {
+  animation: counter-up 0.4s var(--animation-timing);
+}
+
+/* Progress Circle Animation */
+@keyframes progress-circle {
+  0% {
+    stroke-dasharray: 0 628;
+  }
+  100% {
+    stroke-dasharray: var(--progress-value, 0) 628;
+  }
+}
+
+.progress-circle {
+  stroke-dasharray: 0 628;
+  animation: progress-circle 1s var(--animation-timing) forwards;
+}
+
+/* ==========================================================================
+   HOVER & INTERACTION ANIMATIONS
+   ========================================================================== */
+
+/* Glow Effect */
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(var(--color-primary-500), 0.3); }
+  50% { box-shadow: 0 0 20px rgba(var(--color-primary-500), 0.6); }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Float Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Wiggle Animation */
+@keyframes wiggle {
+  0%, 7%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(-3deg); }
+  20% { transform: rotate(3deg); }
+  25% { transform: rotate(-3deg); }
+  30% { transform: rotate(3deg); }
+  35% { transform: rotate(-1deg); }
+  40% { transform: rotate(1deg); }
+  50%, 100% { transform: rotate(0deg); }
+}
+
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out;
+}
+
+/* Heartbeat Animation */
+@keyframes heartbeat {
+  0%, 50%, 100% { transform: scale(1); }
+  5%, 45% { transform: scale(1.1); }
+  10%, 40% { transform: scale(1.2); }
+  15%, 35% { transform: scale(1.1); }
+  20%, 30% { transform: scale(1); }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   UTILITY ANIMATION CLASSES
+   ========================================================================== */
+
+/* Animation Delays */
+.delay-75 { animation-delay: 75ms; }
+.delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-1000 { animation-delay: 1000ms; }
+
+/* Animation Durations */
+.duration-75 { animation-duration: 75ms; }
+.duration-100 { animation-duration: 100ms; }
+.duration-150 { animation-duration: 150ms; }
+.duration-200 { animation-duration: 200ms; }
+.duration-300 { animation-duration: 300ms; }
+.duration-500 { animation-duration: 500ms; }
+.duration-700 { animation-duration: 700ms; }
+.duration-1000 { animation-duration: 1000ms; }
+
+/* Animation Fill Modes */
+.fill-none { animation-fill-mode: none; }
+.fill-forwards { animation-fill-mode: forwards; }
+.fill-backwards { animation-fill-mode: backwards; }
+.fill-both { animation-fill-mode: both; }
+
+/* Animation Play States */
+.animate-paused { animation-play-state: paused; }
+.animate-running { animation-play-state: running; }
+
+/* Hover Animations */
+.hover\:animate-bounce:hover { animation: bounce 1s infinite; }
+.hover\:animate-pulse:hover { animation: pulse 2s infinite; }
+.hover\:animate-wiggle:hover { animation: wiggle 1s; }
+.hover\:animate-heartbeat:hover { animation: heartbeat 1.5s infinite; }
+
+/* ==========================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ========================================================================== */
+
+/* Will-change for elements that will animate */
+.will-change-auto { will-change: auto; }
+.will-change-scroll { will-change: scroll-position; }
+.will-change-contents { will-change: contents; }
+.will-change-transform { will-change: transform; }
+
+/* Backface visibility for 3D transforms */
+.backface-hidden { backface-visibility: hidden; }
+.backface-visible { backface-visibility: visible; }
+
+/* Transform style for 3D contexts */
+.transform-style-flat { transform-style: flat; }
+.transform-style-3d { transform-style: preserve-3d; }
+
+/* ==========================================================================
+   DARK MODE ADJUSTMENTS
+   ========================================================================== */
+
+[data-theme="dark"] .star {
+  color: var(--color-gray-600);
+}
+
+[data-theme="dark"] .star.filled {
+  color: var(--color-warning-400);
+}
+
+[data-theme="dark"] .card-hover:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+[data-theme="dark"] .input-animated:focus {
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-400), 0.2);
+}
